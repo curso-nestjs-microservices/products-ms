@@ -1,8 +1,7 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Product } from '@prisma/client';
 import { HttpStatus, Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
 import { PaginationDto } from 'src/common';
-import { ProductDB } from './entities';
 import { CreateProductDto, UpdateProductDto } from './dto';
 
 @Injectable()
@@ -25,7 +24,7 @@ export class ProductsService extends PrismaClient implements OnModuleInit {
     const total = await this.product.count({ where: filter });
     const totalPages = Math.ceil(total / limit);
 
-    const products: ProductDB[] = [];
+    const products: Product[] = [];
 
     if (page <= totalPages) {
       const productsFound = await this.product.findMany({

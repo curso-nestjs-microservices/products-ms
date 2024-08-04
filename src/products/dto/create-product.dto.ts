@@ -1,4 +1,5 @@
 import {
+  IsBoolean,
   IsDefined,
   IsNumber,
   IsOptional,
@@ -6,10 +7,11 @@ import {
   Min,
 } from 'class-validator';
 import { Transform, Type } from 'class-transformer';
-import { OmitType } from '@nestjs/mapped-types';
-import { Product } from '../entities/product.entity';
+import { Product } from '@prisma/client';
 
-export class CreateProductDto extends OmitType(Product, ['id'] as const) {
+export class CreateProductDto
+  implements Omit<Product, 'id' | 'createdAt' | 'updatedAt'>
+{
   @IsDefined()
   @IsString()
   name: string;
@@ -23,6 +25,7 @@ export class CreateProductDto extends OmitType(Product, ['id'] as const) {
   price: number;
 
   @IsOptional()
+  @IsBoolean()
   @Transform(({ value }) => [1, '1', true, 'true'].includes(value))
   enabled: boolean;
 }

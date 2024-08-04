@@ -6,6 +6,7 @@ import { envs } from './config';
 
 async function bootstrap() {
   const logger = new Logger('Product-MS');
+
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(
     AppModule,
     {
@@ -13,12 +14,14 @@ async function bootstrap() {
       options: { port: envs.port },
     },
   );
+
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
       forbidNonWhitelisted: true,
     }),
   );
+
   await app.listen();
   logger.log(`Running on port: ${envs.port}`);
 }

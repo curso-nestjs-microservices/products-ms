@@ -4,4 +4,5 @@ export enum ProductPatterns {
   findOneProduct = 'find_one_product',
   updateProduct = 'update_product',
   deleteProduct = 'delete_product',
+  validateProducts = 'validate_products',
 }

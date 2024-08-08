@@ -19,7 +19,8 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "prisma:init": "npx prisma init",
-    "prisma:migrate": "npx prisma migrate dev --name init"
+    "prisma:migrate": "npx prisma migrate dev --name init",
+    "compose:start": "npx prisma migrate && npx prisma generate && npm run start:dev"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",

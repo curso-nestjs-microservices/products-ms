@@ -10,6 +10,6 @@
 4. Ejecutar migración de prisma `npx prisma migrate dev`
 5. Levantar el servidor de NATS
 ```
-docker run -d --name nats-server -p 4222:4222 -p 8222:8222 nats
+docker run -d --name nats-server -p 4222:4222 -p 8222:8222 nats:2.10-alpine3.20
 ```
 6. Ejecutar `npm run start:dev`

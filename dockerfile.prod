@@ -1,0 +1,35 @@
+# DEPENDENCIES
+FROM node:21-alpine3.19 AS base
+WORKDIR /usr/src/app
+
+COPY package*.json ./
+RUN npm install
+
+# BUILD & TEST
+FROM node:21-alpine3.19 AS build
+WORKDIR /usr/src/app
+# Copy node_modules
+COPY --from=base /usr/src/app/node_modules ./node_modules
+# Copy project (without dockerignore files)
+COPY . .
+RUN npx prisma generate
+# Exec build and tests
+RUN npm run build
+# Rebase node_modules with required for production
+RUN npm ci -f --only=production && npm cache clean --force
+
+# RUN npx prisma generate
+
+# RELEASE
+FROM node:21-alpine3.19 AS release
+WORKDIR /usr/src/app
+# Copy files
+COPY --from=build /usr/src/app/node_modules ./node_modules
+COPY --from=build /usr/src/app/dist ./dist
+COPY --from=build /usr/src/app/prisma ./prisma
+
+ENV NODE_ENV=production
+USER node
+
+EXPOSE 3000
+CMD [ "node", "dist/main.js" ]
